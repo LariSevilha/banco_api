@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV.fetch("POSTGRES_HOST", "db") %> # Aponta para o serviço 'db'
+  port: <%= ENV.fetch("POSTGRES_PORT", 5433) %> # Porta mapeada no docker-compose.yml
+  username: <%= ENV.fetch("POSTGRES_USER", "banco_api") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "password") %>
+  database: <%= ENV.fetch("POSTGRES_DB", "banco_api") %>
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB", "banco_api") %>_development
+
+test:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB", "banco_api") %>_test
+
+production:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB", "banco_api") %>_production
