@@ -1,19 +1,13 @@
 module TransactionServices
     class Extract
-      def self.call(user, params)
-        conta = user.conta_bancarias
-        transacoes = Transacao.where("conta_origem_id = ? OR conta_destino_id = ?", conta.id, conta.id)
-        transacoes = transacoes.where("data_hora >= ?", params[:data_inicio]) if params[:data_inicio]
-        transacoes = transacoes.where("data_hora <= ?", params[:data_fim]) if params[:data_fim]
-        transacoes = transacoes.where("valor >= ?", params[:valor_minimo]) if params[:valor_minimo]
-  
-        if params[:tipo] == 'enviadas'
-          transacoes = transacoes.where(conta_origem: conta)
-        elsif params[:tipo] == 'recebidas'
-          transacoes = transacoes.where(conta_destino: conta)
-        end
-  
-        OpenStruct.new(success?: true, transactions: transacoes.order(data_hora: :desc))
+      def self.call(current_user, params)
+        account = current_user.conta_bancaria
+        transactions = Transacao.sent_by_account(account.id).or(Transacao.received_by_account(account.id))
+        transactions = transactions.between_dates(params[:start_date], params[:end_date]) if params[:start_date].present? && params[:end_date].present?
+        transactions = transactions.min_value(params[:min_val]) if params[:min_val].present?
+        OpenStruct.new(transactions: transactions.order(data_hora: :desc))
       end
     end
-end
+  end
+ 
+ 

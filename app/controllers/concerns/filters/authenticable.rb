@@ -12,5 +12,8 @@ module Filters
       @current_user = User.find_by(id: decoded[:user_id]) if decoded
       render json: { error: 'Não autorizado' }, status: :unauthorized unless @current_user
     end
+    def current_user
+      @current_user
+    end
   end
 end
