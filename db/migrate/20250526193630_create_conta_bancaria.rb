@@ -1,13 +1,15 @@
-class CreateContaBancaria < ActiveRecord::Migration[8.0]
+class CreateContaBancarias < ActiveRecord::Migration[6.1]
   def change
     create_table :conta_bancarias do |t|
-      t.references :user, null: false, foreign_key: true
       t.string :numero_conta
       t.string :agencia
-      t.decimal :saldo
+      t.decimal :saldo, precision: 10, scale: 2, default: 0.0
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end
-    add_index :conta_bancarias, :numero_conta, unique: true
   end
 end
+
+# eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3NDg1NDQ1MzV9.zQKW612LF0R1JILdUFg_WYXbgmEGfIHyEaRUAWshcW8
+

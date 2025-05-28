@@ -1,7 +1,7 @@
 module TransactionServices
     class Extract
       def self.call(user, params)
-        conta = user.conta_bancaria
+        conta = user.conta_bancarias
         transacoes = Transacao.where("conta_origem_id = ? OR conta_destino_id = ?", conta.id, conta.id)
         transacoes = transacoes.where("data_hora >= ?", params[:data_inicio]) if params[:data_inicio]
         transacoes = transacoes.where("data_hora <= ?", params[:data_fim]) if params[:data_fim]

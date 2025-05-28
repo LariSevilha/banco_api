@@ -1,7 +1,7 @@
 module TransferServices
     class PixTransfer
         def self.call(user, params)
-        conta_origem = user.conta_bancaria
+        conta_origem = user.conta_bancarias
         conta_destino = ContaBancaria.find(params[:conta_destino_id])
         valor = params[:valor].to_d
 

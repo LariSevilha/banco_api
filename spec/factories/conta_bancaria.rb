@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :conta_bancarium do
+  factory :conta_bancarias do
     user { nil }
     numero_conta { "MyString" }
     agencia { "MyString" }
