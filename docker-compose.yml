@@ -3,6 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:15
+    container_name: banco_api_db
     environment:
       POSTGRES_USER: banco_api
       POSTGRES_PASSWORD: password
@@ -11,14 +12,20 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - '5433:5432'
+    networks:
+      - banco_api_network
 
   redis:
     image: redis:7.0
+    container_name: banco_api_redis
     ports:
       - '6380:6379'
+    networks:
+      - banco_api_network
 
   web:
     build: .
+    container_name: banco_api_web
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
     volumes:
       - .:/rails
@@ -37,6 +44,12 @@ services:
       SECRET_KEY_BASE: dummy_secret_key
       RAILS_ENV: development
       NODE_ENV: development
+    networks:
+      - banco_api_network
 
 volumes:
   db_data:
+
+networks:
+  banco_api_network:
+    driver: bridge

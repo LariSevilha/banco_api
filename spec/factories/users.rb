@@ -1,8 +1,13 @@
 FactoryBot.define do
   factory :user do
-    nome { "MyString" }
-    email { "MyString" }
-    cpf { "MyString" }
-    password_digest { "MyString" }
+    sequence(:email) { |n| "user#{n}@example.com" }
+    password { 'password123' }
+    nome { 'Usuário Teste' }
+    cpf { Faker::CPF.numeric }  
+
+    after(:create) do |user|
+      create(:account, user: user) 
+    end
   end
 end
+
